@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# fixtouch - command to remap touchscreen positioning to actual touch-enabled screen.
+# Problem: every time you connect or disconnect external monitor to your laptop,
+# then when you touch your touch-enabled screen, mouse pointer jumps to wrong
+# position. It is wrongly calculated, like if you spread a touch glass to all displays.
+# Problem is shown in my video here: https://youtu.be/8SruqkN4jAc
+
+# DISPLAYNAME=eDP-1 # nvidia version
+DISPLAYNAME=eDP-1-1 # ubuntu version
+# DISPLAYNAME=eDP1 # displaylink version
+
+xinput --map-to-output $(xinput list --id-only "ELAN Touchscreen") "$DISPLAYNAME"
+
+# TODO
+# Make it execute every time display dis/connection automatically
