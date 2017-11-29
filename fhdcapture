@@ -10,10 +10,11 @@
 # It is needed because vlc has ugly mess with colors while showing picture from ezcap.
 # If you know how to fix this, feel free to contact me or open a new issue.
 
-echo "\$1 = $1"
-mplayer tv:// -tv driver=v4l2:device=/dev/video$1:width=1920:height=1080:fps=30:outfmt=yuy2
+EZCAP_ENUM=`v4l2-ctl --list-devices | grep -A1 "FHD Capture" | tail -n1 | egrep -o '[0-9]'`
+echo "\$EZCAP_ENUM = $EZCAP_ENUM"
+mplayer tv:// -tv driver=v4l2:device=/dev/video$EZCAP_ENUM:width=1920:height=1080:fps=30:outfmt=yuy2
 
 ## Usage
-# $ fhdcapture <id of /dev/videoX device>
+# $ fhdcapture
 # Press win + f11 (my own shortcut) to expand window at full screen and hide title bar.
 # Record it with simplescreenrecorder or obs.
