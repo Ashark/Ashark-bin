@@ -3,7 +3,7 @@
 # fhdcapture - capturing picture from FullHD Capture webcam device
 ## Porpuse
 # This script launches mplayer that is showing image from usb webcam.
-# I am using it with ezcap devica and simplescreenrecorder at second laptop.
+# I am using it with ezcap device and SimpleScreenRecorder at second laptop.
 # This way I am able to shot videos otherwise impossible to capture, for example,
 # actions in bios setup or in bootloader.
 #
@@ -12,9 +12,11 @@
 
 EZCAP_ENUM=`v4l2-ctl --list-devices | grep -A1 "FHD Capture" | tail -n1 | egrep -o '[0-9]'`
 echo "\$EZCAP_ENUM = $EZCAP_ENUM"
-mplayer tv:// -tv driver=v4l2:device=/dev/video$EZCAP_ENUM:width=1920:height=1080:fps=30:outfmt=yuy2
+mplayer -fs tv:// -tv driver=v4l2:device=/dev/video$EZCAP_ENUM:width=1920:height=1080:fps=30:outfmt=yuy2
 
 ## Usage
 # $ fhdcapture
-# Press win + f11 (my own shortcut) to expand window at full screen and hide title bar.
+# Mplayer window will be automatically opened in fullscreen mode
 # Record it with simplescreenrecorder or obs.
+# To exit mplayer fullscreen mode and show title bar, press win + f11 (my own shortcut).
+# I am launching fhdcapture in yakuake window, so to stop mplayer I again open it and press ctrl + c.
