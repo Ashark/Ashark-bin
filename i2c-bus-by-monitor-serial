@@ -1,0 +1,38 @@
+#!/bin/bash
+# This script will return i2c bus device number of monitor with specified
+# serial number. It is usefull, because i2c bus numbers are not consistent over reboots,
+# and you may want to control specific monitor via ddccontrol/gddccontrol
+# and you have several monitors of the same model.
+
+I2C_ID=-1 # do not change this
+if [[ $1 == "-s" ]]; then
+	TARGET_SERIAL=$2 # use passed sn via second argument
+else
+	:
+# 	TARGET_SERIAL="0G2TG7360DXB" # default sn. change to your monitor's serial number
+fi
+echo "Searching i2c device number which monitor s/n is $TARGET_SERIAL"
+
+sudo get-edid  1>/dev/null 2>~/tmp.txt
+POTENTIAL_BUSES=`cat ~/tmp.txt | grep "potential busses found:" | cut -f2 -d":"`
+# echo POTENTIAL_BUSES=$POTENTIAL_BUSES
+
+for X in $POTENTIAL_BUSES
+	do
+# 	echo $X
+		sudo get-edid -b $X 2>/dev/null | grep $TARGET_SERIAL >/dev/null
+		# It would be better to use "get-edid -b $X | parse-edid | grep $TARGET_SERIAL"
+		# instead of just grepping binary output, but for the monent of
+		# programming this script, parse-edid do not shows monitor serial =(
+		
+		if [[ $? != 0 ]]; then
+# 			echo "$X is not for $TARGET_SERIAL"
+			continue
+		else
+# 			echo "Got it! $X is for $TARGET_SERIAL"
+			I2C_ID=$X
+			break
+		fi
+	done
+
+echo $I2C_ID
