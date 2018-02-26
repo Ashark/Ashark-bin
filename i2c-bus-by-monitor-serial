@@ -52,5 +52,7 @@ if [[ $I2C_ID == "-1" ]]; then
 	echo "Not found";
 elif [[ $SN_FOUND == "DUPLICATED" ]]; then
 	echo "Warning! you have several buses with the same monitor s/n."
+	echo "$I2C_ID" # we need quotes to save beginning space in variable. It prevents from blindly using first found I2C_ID
+else
+	echo "$I2C_ID" # All ok, found single i2c id for specified sn
 fi
-echo "$I2C_ID" # we need quotes to save beginning space in variable. It prevents from blindly using first found I2C_ID
