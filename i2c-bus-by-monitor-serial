@@ -3,13 +3,20 @@
 # serial number. It is usefull, because i2c bus numbers are not consistent over reboots,
 # and you may want to control specific monitor via ddccontrol/gddccontrol
 # and you have several monitors of the same model.
+# Note also that you can see your monitor's s/n in /var/log/Xorg.0.log
+# Search there for "Serial No:" or your monitor model.
+# In case you have several monitors with the same s/n (for example, you flashed the same edid) or
+# you have attached several video cables to the same monitor, then several ids will be returned.
 
 I2C_ID=-1 # do not change this
+SN_FOUND=FALSE # for detecting duplication of sn
+
 if [[ $1 == "-s" ]]; then
-	TARGET_SERIAL=$2 # use passed sn via second argument
+	TARGET_SERIAL=$2 # use passed s/n via second argument
 else
 	:
 # 	TARGET_SERIAL="0G2TG7360DXB" # default sn. change to your monitor's serial number
+	echo "You have not specified serial number to search. Use -s <serial_number>"; exit
 fi
 echo "Searching i2c device number which monitor s/n is $TARGET_SERIAL"
 
@@ -30,9 +37,20 @@ for X in $POTENTIAL_BUSES
 			continue
 		else
 # 			echo "Got it! $X is for $TARGET_SERIAL"
-			I2C_ID=$X
-			break
+			if [[ $SN_FOUND == "FALSE" ]]; then
+				SN_FOUND=TRUE
+				I2C_ID=$X
+				#break # do not break, because we will also check for duplication of sn on other buses
+			else
+				SN_FOUND=DUPLICATED
+				I2C_ID=" $I2C_ID and $X" # do not remove starting space, it will separate found ids with spaces
+			fi
 		fi
 	done
 
-echo $I2C_ID
+if [[ $I2C_ID == "-1" ]]; then
+	echo "Not found";
+elif [[ $SN_FOUND == "DUPLICATED" ]]; then
+	echo "Warning! you have several buses with the same monitor s/n."
+fi
+echo "$I2C_ID" # we need quotes to save beginning space in variable. It prevents from blindly using first found I2C_ID
