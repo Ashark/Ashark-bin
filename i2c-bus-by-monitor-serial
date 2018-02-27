@@ -7,6 +7,7 @@
 # Search there for "Serial No:" or your monitor model.
 # In case you have several monitors with the same s/n (for example, you flashed the same edid) or
 # you have attached several video cables to the same monitor, then several ids will be returned.
+# switch-monitor-source script uses this script as a dependency.
 
 I2C_ID=-1 # do not change this
 SN_FOUND=FALSE # for detecting duplication of sn
@@ -31,6 +32,7 @@ for X in $POTENTIAL_BUSES
 		# It would be better to use "get-edid -b $X | parse-edid | grep $TARGET_SERIAL"
 		# instead of just grepping binary output, but for the monent of
 		# programming this script, parse-edid do not shows monitor serial =(
+		# TODO parse-edid to show monitor serial number
 		
 		if [[ $? != 0 ]]; then
 # 			echo "$X is not for $TARGET_SERIAL"
