@@ -38,7 +38,7 @@ else
 	TARGET_SERIAL="0G2TG7360EMB" # default s/n. change to your monitor's serial number
 fi
 
-if [[ `lsmod | grep i2c-dev` != "" ]]; then
+if [[ `lsmod | grep i2c_dev` == "" ]]; then
 	echo "Probing i2c-dev module..."
 	sudo modprobe i2c-dev # you can add it permanently by running "i2c-dev >> /etc/modules"
 else : echo "i2c-dev module was already probbed"
