@@ -12,11 +12,13 @@
 
 EZCAP_ENUM=`v4l2-ctl --list-devices | grep -A1 "FHD Capture" | tail -n1 | egrep -o '[0-9]'`
 echo "\$EZCAP_ENUM = $EZCAP_ENUM"
-mplayer -fs tv:// -tv driver=v4l2:device=/dev/video$EZCAP_ENUM:width=1920:height=1080:fps=30:outfmt=yuy2
+mplayer -fs tv:// -tv driver=v4l2:device=/dev/video$EZCAP_ENUM:width=1920:height=1080:fps=30:outfmt=yuy2 > /dev/null 2>/dev/null &
+sleep 1 # Do not remove. It's needed for wmctrl command to work.
+wmctrl -F -r MPlayer -b add,below
 
 ## Usage
 # $ fhdcapture
-# Mplayer window will be automatically opened in fullscreen mode
+# Mplayer window will be automatically opened in fullscreen mode and go behind all other windows.
 # Record it with simplescreenrecorder or obs.
-# To exit mplayer fullscreen mode and show title bar, press win + f11 (my own shortcut).
-# I am launching fhdcapture in yakuake window, so to stop mplayer I again open it and press ctrl + c.
+# To exit mplayer fullscreen mode and show title bar, press win + f11 (my own shortcut) or press Alt + F3 to show window actions menu.
+# I am launching fhdcapture in yakuake window. To stop Mplayer I close it on taskbar or press Escape after clicking in Mplayer.
