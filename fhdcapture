@@ -15,6 +15,7 @@ echo "\$EZCAP_ENUM = $EZCAP_ENUM"
 mplayer -fs tv:// -tv driver=v4l2:device=/dev/video$EZCAP_ENUM:width=1920:height=1080:fps=30:outfmt=yuy2 > /dev/null 2>/dev/null &
 sleep 1 # Do not remove. It's needed for wmctrl command to work.
 wmctrl -F -r MPlayer -b add,below
+wmctrl -F -r MPlayer -N "FHD Capture" # rename window title for convenience
 
 ## Usage
 # $ fhdcapture
