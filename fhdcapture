@@ -10,7 +10,7 @@
 # It is needed because vlc has ugly mess with colors while showing picture from ezcap.
 # If you know how to fix this, feel free to contact me or open a new issue.
 
-EZCAP_ENUM=`v4l2-ctl --list-devices | grep -A1 "FHD Capture" | tail -n1 | egrep -o '[0-9]'`
+EZCAP_ENUM=`v4l2-ctl --list-devices | grep -A1 -e "FHD Capture" -e "ezcap U3 capture: ezcap U3 capt" | tail -n1 | egrep -o '[0-9]'`
 echo "\$EZCAP_ENUM = $EZCAP_ENUM"
 mplayer -fs tv:// -tv driver=v4l2:device=/dev/video$EZCAP_ENUM:width=1920:height=1080:fps=30:outfmt=yuy2 > /dev/null 2>/dev/null &
 sleep 1 # Do not remove. It's needed for wmctrl command to work.
