@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # fhdcapture - capturing picture from FullHD Capture webcam device
-## Porpuse
+## Purpose
 # This script launches mplayer that is showing image from usb webcam.
 # I am using it with ezcap device and SimpleScreenRecorder at second laptop.
 # This way I am able to shot videos otherwise impossible to capture, for example,
