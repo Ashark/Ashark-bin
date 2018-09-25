@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# For some reason there is still no option in KTorrent (v5.1.1) to start it minimized
+# in tray. It is very annoying to close ktorrent window every login, especially when
+# you need to reboot often. See https://bugs.kde.org/show_bug.cgi?id=363852
+# Place this script into your bin folder and set kde to autostart this script in system settings.
+
+limiter=9
+while [ $limiter -gt 0 ]
+do
+    wmctrl -l | grep KTorrent > /dev/null
+    return_code=$?
+#     echo return code $return_code
+    if [ $return_code -eq 0 ]
+    then
+#      echo window exist
+     wmctrl -x -c "ktorrent" -v
+     kdialog --title "KTorrent window was closed" --passivepopup "Now you are happy." 5 &
+     exit
+    else
+#      echo window does not exist
+     sleep 0.5
+     limiter=$(($limiter - 1))
+    fi
+done
+
+     kdialog --title "Could not found KTorrent window" --passivepopup "Tired of waiting... Exited." 5 & 
+
+     
+# This is my attempt to develop a service file.
+# It worked when started manually, but did not worked automatically.
+# Something is wrong with this service. Not finished yet.
+
+# # ktorrent-window-hider.service - a workaround for autoclosing KTorrent main window.
+# # This service closes ktorrent window at one shot, so it not clutters your desktop and still
+# # leave ktorrent running in tray and seeding.
+# #
+# # Place this file to ~/.config/systemd/user/
+# # and enable it with systemctl --user status ktorrent-window-hider.service
+# 
+# 
+# [Unit]
+# Description=Closes KTorrent window at login
+# 
+# [Service]
+# ExecStartPre=/bin/sleep 5
+# ExecStart=/usr/bin/wmctrl -x -c "ktorrent" -v
+# Type=idle
+# 
+# [Install]
+# WantedBy=graphical.target
