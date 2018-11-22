@@ -1,6 +1,0 @@
-#!/bin/bash
-# This is a crutch for adjusting video position in ip8000 winclient application.
-# Open kde settings -> keyboard combinations -> special actions. Then press Change -> New -> Global key combination -> command or address.
-# Bind some key combination there (for example, win+c) and paste this command:
-
-killall cautoclick; kdialog --passivepopup started; cautoclick -p 10 -i 10 -n 300; kdialog --passivepopup finished;
