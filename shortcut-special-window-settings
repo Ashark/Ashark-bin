@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# This script allows you to set shortcut for Special Window Settings window menu action in kde. It is needed because this action is missing in kwin global shortcuts list and won't be added there (see https://bugs.kde.org/show_bug.cgi?id=401989).
+# To set a shortcut for this, go to System Settings -> Shortcuts -> Custom Shortcuts -> New -> Global shortcut -> "command/url".
+# Then set some shortcut in the Trigger tab and in the Action tab insert full path to this script.
+
+# We are not using "send keyboard input" action because it do not allow you to create a delay before execution, so synthesized input interferes with still pressed shortcut buttons, and prevents normal invoking of action.
+
+# Sometimes it double triggers (when you do not release shortcut immediately), so we need to kill previous xdotool process and then press esc for going through menu from the beginning.
+# We need to sleep for a while, to let you release shortcut keys.
+# Before hitting shortcut, move your mouse away from the area where menu will be popped up and do not move it, otherwise it will highlight menu items and prevent normal invoking of action.
+# I use xdotool deley between input, because otherwise menu items are not switched correctly.
+
+killall xdotool; sleep 0.6; xdotool key --delay 80 esc alt+F3 Down Down Down Down Right Down Down Down Down Down Down Down Down Return
