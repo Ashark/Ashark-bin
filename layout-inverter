@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# First attemtp to mimic Caramba Switcher for Linux
+
+SOURCE_STRING=`xclip -o`
+# SOURCE_STRING="Ghbdtn привет" # for debugging
+# echo $SOURCE_STRING
+
+# https://unix.stackexchange.com/questions/360571/is-there-any-library-or-tool-to-translate-string-from-one-keyboard-layout-to-a
+
+RESULT_STRING=$( echo "$SOURCE_STRING" | iconv -t cp1251 | tr \
+    $(echo "[йцукенгшщзхъфывапролджэ\\ячсмитьбю.ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,\"№;:?Ёёqwertyuiop\[\]asdfghjkl;'\\zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>?@#$^&~\`" | iconv -t cp1251) \
+    $(echo "[qwertyuiop\[\]asdfghjkl;'\\zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>?@#$^&~\`йцукенгшщзхъфывапролджэ\\ячсмитьбю.ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,\"№;:?Ёё]" | iconv -t cp1251) \
+    | iconv -f WINDOWS-1251 -t UTF-8 )
+
+# echo ghbdtn | iconv -t cp1251 | tr g $(echo "п" | iconv -t cp1251) | iconv -f WINDOWS-1251 -t UTF-8 # это работает!
+
+# echo RESULT_STRING=$RESULT_STRING
+
+xclip -i <<< $RESULT_STRING
+xdotool click 2
