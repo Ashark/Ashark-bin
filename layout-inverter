@@ -2,6 +2,20 @@
 
 # First attemtp to mimic Caramba Switcher for Linux
 
+# There is an issue:
+# only selected by mouse goes to primary, but not selection by ctrl+shift+arrow.
+# Because I did not found a way how to write to primary using keyboard selection
+# I will temporary use ctrl+c to clipboard.
+xsel --clipboard --output | xsel --secondary --input # save user's clipboard
+sleep 0.2
+xdotool key ctrl+c
+sleep 0.2
+xsel --clipboard --output | xsel --primary --input # send clipboard to primary
+sleep 0.2
+xsel --secondary --output | xsel --clipboard --input # and restore user's clipboard
+# xsel -sc # just to keep it clear, not necessary
+
+
 SOURCE_STRING=`xclip -o`
 # SOURCE_STRING="Ghbdtn привет" # for debugging
 # echo $SOURCE_STRING
@@ -22,5 +36,5 @@ xclip -i <<< $RESULT_STRING
 sleep 0.5 # do not remove
 xdotool key Delete type --clearmodifiers --delay 0  "`xsel -o`" # without delete key it messes up the first letter of insertion
 
-# There is an issue: 
-# only selected by mouse goes to primary, but not selection by ctrl+shift+arrow.
+# This is for watching at selections (for debugging). Run from separate terminal.
+# watch -n0.2 'echo -e "CLIPBOARD=`xsel -bo`\nPRIMARY=`xsel -po`\nSECONDARY=`xsel -so`"'
