@@ -18,4 +18,9 @@ RESULT_STRING=$( echo "$SOURCE_STRING" | iconv -t cp1251 | tr \
 # echo RESULT_STRING=$RESULT_STRING
 
 xclip -i <<< $RESULT_STRING
-xdotool click 2
+
+sleep 0.5 # do not remove
+xdotool key Delete click 2 # we use delete key to delete selection before insertion of inverted paste.
+
+# There is an issue: 
+# only selected by mouse goes to primary, but not selection by ctrl+shift+arrow.
