@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# This script is used for checking a bootable usb sticks by starting a qemu virtual machine.
+# It can save your time while preparing a stick because you do not need waiting real hardware reboots.
+
+# Usage: $0 <device> <b|u>
+# device - a device which is checked, for example, /dev/sdd
+# b - for legacy bios boot check
+# u - for uefi boot check
+
+if [[ $2 == "u" ]]; then 
+    BIOS_STR="-bios /usr/share/ovmf/x64/OVMF_CODE.fd";
+fi
+
+sudo qemu-system-x86_64 $BIOS_STR -m 512 -enable-kvm -drive file=$1,format=raw,index=0,media=disk
