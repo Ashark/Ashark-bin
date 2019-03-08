@@ -9,7 +9,12 @@
 # u - for uefi boot check
 
 if [[ $2 == "u" ]]; then 
-    BIOS_STR="-bios /usr/share/ovmf/x64/OVMF_CODE.fd";
+    if [ -f /etc/os-release ]; then . /etc/os-release; fi
+    if [[ $ID_LIKE == "ubuntu debian" ]]; then
+        BIOS_STR="-bios /usr/share/OVMF/OVMF_CODE.fd";
+    else
+        BIOS_STR="-bios /usr/share/ovmf/x64/OVMF_CODE.fd"
+    fi
 fi
 
 sudo qemu-system-x86_64 $BIOS_STR -m 512 -enable-kvm -drive file=$1,format=raw,index=0,media=disk
