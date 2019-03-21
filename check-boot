@@ -29,4 +29,10 @@ if [[ $2 == "u" ]]; then
     fi
 fi
 
+# I do not know how to always show local cursor in qemu, so I use extramaus
+if [ -x "$(command -v extramaus)" ]; then
+    killall extramaus 2> /dev/null # kill previous instance
+    extramaus &
+fi
+
 sudo qemu-system-x86_64 $BIOS_STR -m 512 -enable-kvm -drive file=$1,format=raw,index=0,media=disk
