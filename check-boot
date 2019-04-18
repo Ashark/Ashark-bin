@@ -35,4 +35,8 @@ if [ -x "$(command -v extramaus)" ]; then
     extramaus &
 fi
 
-sudo qemu-system-x86_64 $BIOS_STR -m 1G -enable-kvm -drive file=$1,format=raw,index=0,media=disk
+if [[ $1 == *.iso ]]; then
+    sudo qemu-system-x86_64 $BIOS_STR -m 1G -enable-kvm -cdrom $1
+else
+    sudo qemu-system-x86_64 $BIOS_STR -m 1G -enable-kvm -drive file=$1,format=raw,index=0,media=disk
+fi
