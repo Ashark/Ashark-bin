@@ -1,6 +1,5 @@
 #!/bin/bash
 # This script is used for getting linux's watch like functionality with cisco telnet prompt
-# Its goal is similar as sshpass, but for telnet, so I call it telnetpass
 
 . ~/.private/cisco_pw # should contain PASSWORD variable
 
