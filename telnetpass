@@ -1,0 +1,16 @@
+#!/bin/bash
+# This script is used for automatically pass authentication by username and password in telnet prompt
+# Its goal is similar as sshpass, but for telnet, so I call it telnetpass
+
+. ~/.private/cisco_pw # should contain PASSWORD variable
+
+export SEXPECT_SOCKFILE=/tmp/sexpect-telnetpass-$$.sock
+sexpect spawn telnet $1
+sexpect expect -cstring 'Username:'
+sexpect send -enter $USER 
+sexpect expect -cstring 'Password:'
+sexpect send -enter $PASSWORD
+sexpect interact
+
+# TODO
+# I should handle .sock files in /tmp somehow. Probably, script should catch ctrl+c signal and remove the sock file.

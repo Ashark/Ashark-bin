@@ -1,0 +1,31 @@
+#!/bin/bash
+# This script is used for getting linux's watch like functionality with cisco telnet prompt
+# Its goal is similar as sshpass, but for telnet, so I call it telnetpass
+
+. ~/.private/cisco_pw # should contain PASSWORD variable
+
+export SEXPECT_SOCKFILE=/tmp/sexpect-telnetwatch-$$.sock
+sexpect spawn telnet $1
+sexpect expect -cstring 'Username:'
+sexpect send -enter $USER 
+sexpect expect -cstring 'Password:'
+sexpect send -enter $PASSWORD
+
+COUNTDOWN=9999
+while [[ $COUNTDOWN != 0 ]]; do
+   sexpect expect -cstring '>'
+   sexpect send -enter "$2" # the command itself
+   let "COUNTDOWN--";
+   echo -e "\nCOUNTDOWN is $COUNTDOWN" >&2
+   sleep 1;
+   clear 
+done
+
+# Usage:
+# $1 - hostname on which to perform commands
+# $2 - command string
+# example:
+# ./telnetwatch Q224 "sh mac add int Gi0/5"
+
+# TODO
+# I should handle .sock files in /tmp somehow. Probably, script should catch ctrl+c signal and remove the sock file.
