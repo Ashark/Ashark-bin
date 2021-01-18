@@ -35,4 +35,4 @@ else
     MEDIA_STR="-drive file=$1,format=raw,index=0,media=disk"
 fi
 
-sudo qemu-system-x86_64 $BIOS_STR -m 1G -enable-kvm $MEDIA_STR -show-cursor
+sudo qemu-system-x86_64 $BIOS_STR -m 1G -enable-kvm $MEDIA_STR -display sdl,show-cursor=on
