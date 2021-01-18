@@ -10,17 +10,17 @@ echo -e "Usage:\n${0##*/} <device> <b|u>
  u - for uefi boot check"
 }
 
-if [[ $1 == "--help" || $# != 2 ]]; then
+if [[ "$1" == "--help" || $# != 2 ]]; then
     print_usage
     exit
 fi
 
-if df --output=source,target | grep $1 1>&2; then
+if df --output=source,target | grep "$1" 1>&2; then
     >&2 echo -e "Warning: Probably a partition of $1 in mounted. You should unmount it to prevent corruption of your fs. Booting refused."
     exit 1
 fi
 
-if [[ $2 == "u" ]]; then 
+if [[ "$2" == "u" ]]; then 
     if [ -f /etc/os-release ]; then . /etc/os-release; fi
     if [[ $ID_LIKE == "ubuntu debian" ]]; then
         BIOS_STR="-bios /usr/share/OVMF/OVMF_CODE.fd";
@@ -35,7 +35,7 @@ if [ -x "$(command -v extramaus)" ]; then
     extramaus &
 fi
 
-if [[ $1 == *.iso ]]; then
+if [[ "$1" == *.iso ]]; then
     MEDIA_STR="-cdrom $1"
 else
     MEDIA_STR="-drive file=$1,format=raw,index=0,media=disk"
