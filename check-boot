@@ -29,16 +29,10 @@ if [[ "$2" == "u" ]]; then
     fi
 fi
 
-# I do not know how to always show local cursor in qemu, so I use extramaus
-if [ -x "$(command -v extramaus)" ]; then
-    killall extramaus 2> /dev/null # kill previous instance
-    extramaus &
-fi
-
 if [[ "$1" == *.iso ]]; then
     MEDIA_STR="-cdrom $1"
 else
     MEDIA_STR="-drive file=$1,format=raw,index=0,media=disk"
 fi
 
-sudo qemu-system-x86_64 $BIOS_STR -m 1G -enable-kvm $MEDIA_STR
+sudo qemu-system-x86_64 $BIOS_STR -m 1G -enable-kvm $MEDIA_STR -show-cursor
