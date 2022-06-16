@@ -4,6 +4,7 @@
 
 # This script lists windows in kwin on wayland. It is useful, because wmctrl does not work on wayland.
 # I read journalctl because printing in kwin script is currently broken. See https://bugs.kde.org/show_bug.cgi?id=445058
+# https://unix.stackexchange.com/questions/706477/is-there-a-way-to-get-list-of-windows-on-kde-wayland - described this script here.
 
 import subprocess
 from datetime import datetime
