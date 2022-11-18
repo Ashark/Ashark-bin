@@ -13,7 +13,7 @@ from datetime import datetime
 def get_list_of_windows():
    datetime_now = datetime.now()
 
-   script = "/home/andrew/bin/list_windows.js"
+   script = "/home/andrey/bin/list_windows.js"
 
    reg_script_number = subprocess.run("dbus-send --print-reply --dest=org.kde.KWin \
                         /Scripting org.kde.kwin.Scripting.loadScript \
