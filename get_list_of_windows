@@ -27,7 +27,7 @@ def get_list_of_windows():
 
    since = str(datetime_now)
 
-   msg = subprocess.run("journalctl _COMM=kwin_wayland -o cat --since \"" + since + "\"",
+   msg = subprocess.run("journalctl _COMM=kwin_$XDG_SESSION_TYPE -o cat --since \"" + since + "\"",
                         capture_output=True, shell=True).stdout.decode().rstrip().split("\n")
    msg = [el.lstrip("js: ") for el in msg]
 
