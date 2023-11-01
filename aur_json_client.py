@@ -16,23 +16,23 @@ class AurJsonClient:
         self.full_url = None
     
     def search(self, args, by):
-        self.target_url += "/search"
-        self.target_url += f"/{args}"
+        self.full_url = self.target_url + "/search"
+        self.full_url += f"/{args}"
         values = {}
         if by:
             values["by"] = by
         params = urlencode(values)
-        self.full_url = f"{self.target_url}?{params}"
+        self.full_url = f"{self.full_url}?{params}"
         response = urlopen(self.full_url).read()
-        self.print_results(json.loads(response))
+        return json.loads(response)
     
     def info(self, args):
-        self.target_url += "/info"
-        self.target_url += f"/{args}"
+        self.full_url = self.target_url + "/info"
+        self.full_url += f"/{args}"
         params = urlencode({})
-        self.full_url = f"{self.target_url}?{params}"
+        self.full_url = f"{self.full_url}?{params}"
         response = urlopen(self.full_url).read()
-        self.print_results(json.loads(response))
+        return json.loads(response)
     
     def print_results(self, data):
         print("Request url:\n  " + self.full_url)
@@ -47,10 +47,11 @@ class AurJsonClient:
                 # print the name first, for convenience
                 if "Name" in pkg:
                     print(f"  Name: {pkg["Name"]}")
+                    print(f"  https://aur.archlinux.org/packages/{pkg["Name"]}")  # print link to aur page
                     del pkg["Name"]
                 
                 for prop in pkg:
-                    print(f"  {prop}: {pkg[prop]}")
+                    print(f"    {prop}: {pkg[prop]}")
                 print()
         else:
             print("Empty response.")
@@ -73,17 +74,21 @@ def main():
                         help="Operate in info mode")
     parser.add_argument("-b",
                         "--by",
+                        action="append",
                         choices=["name", "name-desc", "maintainer", "depends", "makedepends", "optdepends", "checkdepends"],
-                        help="The name of the field to search in")
+                        help="The name of the field to search in. Support multiple occurrences (see https://wiki.archlinux.org/title/Talk:Aurweb_RPC_interface#Use_several_by_arguments?)")
     parser.add_argument("arg", help="String to search")
     
     options = parser.parse_args()
     
     ajc = AurJsonClient()
     if options.search_mode == 1:
-        ajc.info(options.arg)
+        result = ajc.info(options.arg)
+        ajc.print_results(result)
     else:
-        ajc.search(options.arg, options.by)
+        for single_by in options.by:
+            result = ajc.search(options.arg, single_by)
+            ajc.print_results(result)
 
 
 if __name__ == "__main__":
