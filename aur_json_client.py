@@ -59,17 +59,17 @@ class AurJsonClient:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.set_defaults(search_mode=0)  # sets options.search_mode to 0 by default
+    parser.set_defaults(search_mode=1)  # sets options.search_mode to 1 by default
     parser.add_argument("-s",
                         "--search",
                         action="store_const",
-                        const=0,
+                        const=1,
                         dest="search_mode",
                         help="Operate in search mode")
     parser.add_argument("-i",
                         "--info",
                         action="store_const",
-                        const=1,
+                        const=0,
                         dest="search_mode",
                         help="Operate in info mode")
     parser.add_argument("-b",
@@ -83,12 +83,12 @@ def main():
     
     ajc = AurJsonClient()
     if options.search_mode == 1:
-        result = ajc.info(options.arg)
-        ajc.print_results(result)
-    else:
         for single_by in options.by:
             result = ajc.search(options.arg, single_by)
             ajc.print_results(result)
+    else:
+        result = ajc.info(options.arg)
+        ajc.print_results(result)
 
 
 if __name__ == "__main__":
