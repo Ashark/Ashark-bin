@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.12
+#!/usr/bin/env python3
 
 # This script allows you to make aur queries.
 # See https://wiki.archlinux.org/title/Aurweb_RPC_interface
