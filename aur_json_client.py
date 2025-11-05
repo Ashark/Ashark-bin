@@ -14,7 +14,7 @@ class AurJsonClient:
     def __init__(self):
         self.target_url = "https://aur.archlinux.org/rpc/v5"
         self.full_url = None
-    
+
     def search(self, args, by):
         self.full_url = self.target_url + "/search"
         self.full_url += f"/{args}"
@@ -25,7 +25,7 @@ class AurJsonClient:
         self.full_url = f"{self.full_url}?{params}"
         response = urlopen(self.full_url).read()
         return json.loads(response)
-    
+
     def info(self, args):
         self.full_url = self.target_url + "/info"
         self.full_url += f"/{args}"
@@ -33,7 +33,7 @@ class AurJsonClient:
         self.full_url = f"{self.full_url}?{params}"
         response = urlopen(self.full_url).read()
         return json.loads(response)
-    
+
     def print_results(self, data):
         print("Request url:\n  " + self.full_url)
         if data["type"] == "error":
@@ -78,9 +78,9 @@ def main():
                         choices=["name", "name-desc", "maintainer", "depends", "makedepends", "optdepends", "checkdepends"],
                         help="The name of the field to search in. Support multiple occurrences (see https://wiki.archlinux.org/title/Talk:Aurweb_RPC_interface#Use_several_by_arguments?)")
     parser.add_argument("arg", help="String to search")
-    
+
     options = parser.parse_args()
-    
+
     ajc = AurJsonClient()
     if options.search_mode == 1:
         for single_by in options.by:
