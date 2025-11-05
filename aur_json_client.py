@@ -5,6 +5,7 @@
 # Author: Andrew Shark <ashark linuxcomp ru>
 
 import json
+import sys
 from urllib.parse import urlencode
 from urllib.request import urlopen
 import argparse
@@ -77,17 +78,39 @@ def main():
                         action="append",
                         choices=["name", "name-desc", "maintainer", "depends", "makedepends", "optdepends", "checkdepends"],
                         help="The name of the field to search in. Support multiple occurrences (see https://wiki.archlinux.org/title/Talk:Aurweb_RPC_interface#Use_several_by_arguments?)")
-    parser.add_argument("arg", help="String to search")
 
-    options = parser.parse_args()
+    options, unknown_args = parser.parse_known_args(sys.argv[1:])
 
+    # Sometimes, user have to use "--" parameter, to pass some arguments that are otherwise recognized as options.
+    # For example, ./script.py --search --by name -- -bin
+    # Otherwise, that "-bin" argument is parsed as "-b" "in", which is unwanted.
+    # So, here we delete that "--" parameter, if was presented.
+    if len(unknown_args):
+        if unknown_args[0] == "--":
+            unknown_args.pop(0)
+
+    try:
+        assert len(unknown_args) == 1
+    except AssertionError:
+        print("You should use exactly one argument string.")
+        print("Got:", unknown_args)
+        print("""\
+Usage example:
+  Searching all packages, which names contain "-eap" (i.e. all EAP JetBrains IDEs):
+    ./script.py --search --by name -- -eap
+Note that usage of "--": it allows you to pass the string to search, which starts with dash
+(in this case, the "-eap" string).\
+""")
+        exit(1)
+
+    arg_str = unknown_args[0]
     ajc = AurJsonClient()
     if options.search_mode == 1:
         for single_by in options.by:
-            result = ajc.search(options.arg, single_by)
+            result = ajc.search(arg_str, single_by)
             ajc.print_results(result)
     else:
-        result = ajc.info(options.arg)
+        result = ajc.info(arg_str)
         ajc.print_results(result)
 
 
